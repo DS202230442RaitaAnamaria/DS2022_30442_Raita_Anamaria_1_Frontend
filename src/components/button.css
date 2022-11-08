@@ -1,0 +1,5 @@
+.but:hover{
+    transition: all 0.2s ease-in-out;
+    background: #fff;
+    color: #0d6efd
+}

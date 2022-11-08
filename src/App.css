@@ -1,38 +1,88 @@
 .App {
+  background-image: url( "./blooddonation.jpg");
+  min-height: 500px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: "absolute";
+
+}
+
+
+.App3 {
+  background-color: rgb(202, 172, 172);
+  min-height: 600px;
+}
+
+.popup-box {
+  position: fixed;
+  background: #00000050;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+ 
+.box {
+  position: relative;
+  width: 60%;
+  margin: 0 auto;
+  height: auto;
+  max-height: 80vh;
+  margin-top: calc(100vh - 85vh - 20px);
+  background: #ffcccb;
+  border-radius: 4px;
+  padding: 20px;
+  border: 1px solid #999;
+  overflow: auto;
+}
+ 
+.close-icon {
+  content: 'x';
+  cursor: pointer;
+  position: fixed;
+  right: calc(20% - 30px);
+  top: calc(100vh - 85vh - 33px);
+  background: #dc3545;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  line-height: 20px;
   text-align: center;
+  border: 1px solid #999;
+  font-size: 20px;
 }
+.slide-container {
+  width: 70%;
+  margin: auto; }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
+h3 {
+  text-align: center; }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.each-slide > div {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-size: cover;
+  height: 300px;
 }
 
-.App-link {
-  color: #61dafb;
+.each-slide span {
+  padding: 20px;
+  font-size: 20px;
+  background: #efefef;
+  text-align: center;
 }
+.App2 {
+  background-image: url( "./bd.jpg");
+  min-height: 1000px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: "absolute";
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
+.CSRModal{
+  width: 90%;
+  max-width: none!important;
+  }
