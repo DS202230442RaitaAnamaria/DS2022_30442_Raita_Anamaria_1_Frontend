@@ -7,6 +7,8 @@ import {Button,Table,Form} from 'react-bootstrap'
 import { Line } from 'react-chartjs-2';
 import SockJsClient from 'react-stomp';
 import Card from 'react-bootstrap/Card';
+import { Chart as ChartJS, registerables } from 'chart.js';
+ChartJS.register(...registerables);
 
 function Userpage() {
     const [device, setDevice] = useState([]);
