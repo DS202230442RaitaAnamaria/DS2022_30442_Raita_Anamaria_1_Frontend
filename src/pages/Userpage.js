@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios'
 import NavbarUser from '../components/NavbarUser';
@@ -7,7 +7,6 @@ import {Button,Table,Form} from 'react-bootstrap'
 import { Line } from 'react-chartjs-2';
 import SockJsClient from 'react-stomp';
 import Card from 'react-bootstrap/Card';
-
 
 function Userpage() {
     const [device, setDevice] = useState([]);
@@ -27,10 +26,11 @@ function Userpage() {
     let iddevice=parseInt(msg.message)
     
     for(let i of device){
-      if(i.iddevices == iddevice)
+      if(i.iddevices === iddevice)
       {
         setIsHidden(true);
         setMessage("The device with description "+i.description+" exceeded maximum Energy Hourly Consumption"); 
+        break;
       }
       else{
       setMessage("");
@@ -150,7 +150,7 @@ function Userpage() {
         onDisconnect={console.log("Disconnected!")}
         onMessage={msg => onMessageReceived(msg)}
         debug={false}
-      />
+         />
 
         { isHidden && < Card bg='danger' style={{ width: '20rem',marginLeft:'40%',alignContent:'center' }}>
         <div>
@@ -183,6 +183,7 @@ function Userpage() {
             </Form>
 
             <h3 className="mt-5">See measurements per Hour</h3>
+            
       <Line data={data}
        />
        <h6 style={{marginTop:"10px"}}>OX - ora masuratorii</h6>

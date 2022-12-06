@@ -1,11 +1,10 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link} from 'react-router-dom';
 import axios from 'axios'
 import NavAdmin from '../components/NavAdmin';
 import {Button,Form,Table} from 'react-bootstrap'
 import Modal from 'react-modal';
 import '../App.css';
-import { BiDevices } from 'react-icons/bi';
 function AdminPage() {
 
     const [persoane, setPersoane] = useState([]);
@@ -95,7 +94,7 @@ function AdminPage() {
     async function handleSubmit(event) {
         var { desc,address, mhec,own} = document.forms[0];
         const params = new URLSearchParams({
-            id: own.value
+            id: parseInt(own.value)
           }).toString();
           var obj = JSON.parse(localStorage.getItem('user'));
           let headers = {
@@ -105,7 +104,7 @@ function AdminPage() {
           
            try {
             var response= await axios.post("http://localhost:8081/devices/save?"+params,
-            {description:desc.value,address:address.value,mhec:mhec.value},
+            {description:desc.value,address:address.value,mhec:parseFloat(mhec.value)},
                 {headers: headers}
                 )
           } catch (error) {
@@ -182,16 +181,16 @@ function AdminPage() {
     //edit device
 
     async function editDevice(event) {
-        var { desc,addr, mhec} = document.forms[0];
+        var { desc,addr, mhec2} = document.forms[0];
           var obj = JSON.parse(localStorage.getItem('user'));
           let headers = {
                   "Content-Type": "application/json; charset=UTF-8",
                   "Authorization": 'Bearer '+ obj
            };
-  
+
            try {
             var response= await axios.post("http://localhost:8081/devices/edit",
-            {iddevices:selectedDevice.iddevices,description:desc.value,address:addr.value,mhec:mhec.value},
+            {iddevices:selectedDevice.iddevices,description:desc.value,address:addr.value,mhec:parseFloat(mhec2.value)},
                 {headers: headers}
                 )
           } catch (error) {
@@ -271,7 +270,7 @@ function AdminPage() {
 
         {/* Tabelul de devices */}
         { isVizibleD &&
-        <Table variant='dark' bordered style={{marginBottom:'-10px',marginTop:'10px',width:"750px",marginLeft:"270px",marginBottom:"10px"}}>
+        <Table variant='dark' bordered style={{marginTop:'10px',width:"750px",marginLeft:"270px",marginBottom:"10px"}}>
                 <thead>
                     <tr>
                         <th style={{textAlign:"center"}}>#</th>  
@@ -397,7 +396,7 @@ function AdminPage() {
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Maxim Energy Consumption per Hour</Form.Label>
-                    <Form.Control type="number"  step="0.1" required name= "mhec"
+                    <Form.Control type="number"  step="0.001" required name= "mhec2"
                     defaultValue={selectedDevice.mhec}
                     onChange={(event) =>
                                 event.target.value < 0
@@ -428,7 +427,7 @@ function AdminPage() {
                     <Form.Control type="text" defaultValue={selectedPerson.username} required name= "uname"/>
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label>Parsola</Form.Label>
+                    <Form.Label>Parola</Form.Label>
                     <Form.Control type="password" defaultValue={selectedPerson.password}  required name= "pass"  />
                 </Form.Group>
                 <Button  class="but" variant="info" type="submit" style={{margin:"8px"}}>
