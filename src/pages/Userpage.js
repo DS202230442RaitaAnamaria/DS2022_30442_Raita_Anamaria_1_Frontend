@@ -5,16 +5,39 @@ import NavbarUser from '../components/NavbarUser';
 import Modal from 'react-modal';
 import {Button,Table,Form} from 'react-bootstrap'
 import { Line } from 'react-chartjs-2';
+import SockJsClient from 'react-stomp';
+import Card from 'react-bootstrap/Card';
 
 
 function Userpage() {
     const [device, setDevice] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [isHidden, setIsHidden] = useState(false);
     const [data,setData] = useState({
         labels: [],
         datasets: [],
       });
     const [selectedDevice,setSelectedDevice]=useState([])
+    const [message, setMessage] = useState('');
+  let onConnected = () => {
+    console.log("Connected!!")
+  }
+
+  let onMessageReceived = (msg) => {
+    let iddevice=parseInt(msg.message)
+    
+    for(let i of device){
+      if(i.iddevices == iddevice)
+      {
+        setIsHidden(true);
+        setMessage("The device with description "+i.description+" exceeded maximum Energy Hourly Consumption"); 
+      }
+      else{
+      setMessage("");
+      setIsHidden(false);
+      }
+    }
+  }
     const togglePopup = (device) => {
         setIsOpen(!isOpen);
         setSelectedDevice(device)
@@ -25,6 +48,7 @@ function Userpage() {
       function toTime(date){
         return date?.split('T')[1].substring(0,5)
     }
+
     useEffect(() => {
 
         var obj = JSON.parse(localStorage.getItem('user'));
@@ -118,7 +142,20 @@ function Userpage() {
                           
                       ))}
         </Table>
-    
+
+        <SockJsClient
+        url={'http://localhost:8081/ws-message'}
+        topics={['/topic/message']}
+        onConnect={onConnected}
+        onDisconnect={console.log("Disconnected!")}
+        onMessage={msg => onMessageReceived(msg)}
+        debug={false}
+      />
+
+        { isHidden && < Card bg='danger' style={{ width: '20rem',marginLeft:'40%',alignContent:'center' }}>
+        <div>
+      <Card.Text style={{textAlign:"center",padding:"20px"}} >{message}</Card.Text>
+    </div></Card>}
         <Modal
             isOpen={isOpen}
             onRequestClose={closeModal}
