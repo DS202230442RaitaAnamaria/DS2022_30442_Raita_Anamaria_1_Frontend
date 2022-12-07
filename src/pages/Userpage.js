@@ -59,7 +59,7 @@ function Userpage() {
             "Content-Type": "application/json; charset=UTF-8",
             "Authorization": 'Bearer '+ obj
              };
-        axios.get("http://localhost:8081/devices/username",{headers:headers2})
+        axios.get("http://20.113.115.48:8081/devices/username",{headers:headers2})
             .then(res => {
                 setDevice(res.data);
                 
@@ -82,7 +82,7 @@ function Userpage() {
          };
          var finalDate=date22.value.split("-")[1]+"/"+date22.value.split("-")[2]+"/"+date22.value.split("-")[0]
 
-         axios.get("http://localhost:8081/devices/chart?id="+selectedDevice+"&data="+finalDate,{headers:headers})
+         axios.get("http://20.113.115.48:8081/devices/chart?id="+selectedDevice+"&data="+finalDate,{headers:headers})
             .then(resp => {
                 console.log(resp.data)     
                 var listatime = [];
@@ -146,7 +146,7 @@ function Userpage() {
         </Table>
 
         <SockJsClient
-        url={'http://localhost:8081/ws-message'}
+        url={'http://20.113.115.48:8081/ws-message'}
         topics={['/topic/message']}
         onConnect={onConnected}
         onDisconnect={console.log("Disconnected!")}

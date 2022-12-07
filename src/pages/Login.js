@@ -18,8 +18,8 @@ export default function Login() {
 
 
       try {
-        var response= await axios.post("http://localhost:8081/person/getAuthority",{username: uname.value, password: pass.value})
-        var response2= await axios.post("http://localhost:8081/person/login",{username: uname.value, password: pass.value})
+        var response= await axios.post("http://20.113.115.48:8081/person/getAuthority",{username: uname.value, password: pass.value})
+        var response2= await axios.post("http://20.113.115.48:8081/person/login",{username: uname.value, password: pass.value})
 
         localStorage.setItem('role',JSON.stringify(response.data));
         localStorage.setItem('user',JSON.stringify(response2.data.token));

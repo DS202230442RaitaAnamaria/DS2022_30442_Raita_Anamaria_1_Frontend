@@ -71,7 +71,7 @@ function AdminPage() {
             "Content-Type": "application/json; charset=UTF-8",
             "Authorization": 'Bearer '+ obj
              };
-        axios.get("http://localhost:8081/person/alluser",{headers:headers2})
+        axios.get("http://20.113.115.48:8081/person/alluser",{headers:headers2})
             .then(res => {
                 setPersoane(res.data);
                 
@@ -79,7 +79,7 @@ function AdminPage() {
             .catch(err => {
                
             })
-        axios.get("http://localhost:8081/devices/all",{headers:headers2})
+        axios.get("http://20.113.115.48:8081/devices/all",{headers:headers2})
             .then(resp => {
                 setDevice(resp.data);
             })
@@ -103,7 +103,7 @@ function AdminPage() {
            };
           
            try {
-            var response= await axios.post("http://localhost:8081/devices/save?"+params,
+            var response= await axios.post("http://20.113.115.48:8081/devices/save?"+params,
             {description:desc.value,address:address.value,mhec:parseFloat(mhec.value)},
                 {headers: headers}
                 )
@@ -123,7 +123,7 @@ function AdminPage() {
            };
           
            try {
-            var response= await axios.post("http://localhost:8081/person/save",
+            var response= await axios.post("http://20.113.115.48:8081/person/save",
             {username:uname.value,password:pass.value,role:"client"},
                 {headers: headers}
                 )
@@ -142,7 +142,7 @@ function AdminPage() {
            id: nr,
        }).toString();
 
-       const url="http://localhost:8081/person/delete?"+params
+       const url="http://20.113.115.48:8081/person/delete?"+params
        let headers2 = {
            "Content-Type": "application/json; charset=UTF-8",
            "Authorization": 'Bearer '+ obj
@@ -164,7 +164,7 @@ function AdminPage() {
            id: nr,
        }).toString();
 
-       const url="http://localhost:8081/devices/delete?"+params
+       const url="http://20.113.115.48:8081/devices/delete?"+params
        let headers2 = {
            "Content-Type": "application/json; charset=UTF-8",
            "Authorization": 'Bearer '+ obj
@@ -189,7 +189,7 @@ function AdminPage() {
            };
 
            try {
-            var response= await axios.post("http://localhost:8081/devices/edit",
+            var response= await axios.post("http://20.113.115.48:8081/devices/edit",
             {iddevices:selectedDevice.iddevices,description:desc.value,address:addr.value,mhec:parseFloat(mhec2.value)},
                 {headers: headers}
                 )
@@ -209,7 +209,7 @@ function AdminPage() {
            };
   
            try {
-            var response= await axios.post("http://localhost:8081/person/edit",
+            var response= await axios.post("http://20.113.115.48:8081/person/edit",
             {idpeople:selectedPerson.idpeople,username:uname.value,password:pass.value},
                 {headers: headers}
                 )
