@@ -8,18 +8,25 @@ import { Line } from 'react-chartjs-2';
 import SockJsClient from 'react-stomp';
 import Card from 'react-bootstrap/Card';
 import { Chart as ChartJS, registerables } from 'chart.js';
+import { ChatServiceClient } from "../chat_grpc_web_pb";
+import ChatPage from './ChatPage';
+import { ChatMessage, ReceiveMsgRequest, Empty } from "../chat_pb"
 ChartJS.register(...registerables);
-
+const client = new ChatServiceClient("http://localhost:8080", null, null);
 function Userpage() {
     const [device, setDevice] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [isHidden, setIsHidden] = useState(false);
+    const [isOpen3, setIsOpen3] = useState(false);
     const [data,setData] = useState({
         labels: [],
         datasets: [],
       });
     const [selectedDevice,setSelectedDevice]=useState([])
     const [message, setMessage] = useState('');
+    const [toUser,setToUser]=useState('')
+   
+
   let onConnected = () => {
     console.log("Connected!!")
   }
@@ -59,7 +66,7 @@ function Userpage() {
             "Content-Type": "application/json; charset=UTF-8",
             "Authorization": 'Bearer '+ obj
              };
-        axios.get("http://20.113.115.48:8081/devices/username",{headers:headers2})
+        axios.get("http://localhost:8081/devices/username",{headers:headers2})
             .then(res => {
                 setDevice(res.data);
                 
@@ -67,10 +74,7 @@ function Userpage() {
             .catch(err => {
                
             })
-
-            
-
-    }, [])
+              }, [])
 
     async function handleSubmit(event){
         event.preventDefault()
@@ -82,7 +86,7 @@ function Userpage() {
          };
          var finalDate=date22.value.split("-")[1]+"/"+date22.value.split("-")[2]+"/"+date22.value.split("-")[0]
 
-         axios.get("http://20.113.115.48:8081/devices/chart?id="+selectedDevice+"&data="+finalDate,{headers:headers})
+         axios.get("http://localhost:8081/devices/chart?id="+selectedDevice+"&data="+finalDate,{headers:headers})
             .then(resp => {
                 console.log(resp.data)     
                 var listatime = [];
@@ -113,12 +117,35 @@ function Userpage() {
             })
 
     }
+
+    const openChat   = (username) => {
+      setIsOpen3(true)
+      setToUser('admin')
+      sendMessage()
+   }
+   function setIsOpen4(val){
+    setIsOpen3(val)
+}
+function sendMessage(message) {
+  const msg = new ChatMessage();
+  msg.setMsg("useropenedchat");
+  msg.setFrom(window.localStorage.getItem("username"));
+  msg.setTime(new Date().toLocaleString());
+  msg.setTo(toUser)
+
+  client.sendMsg(msg, null, (err, response) => {
+    console.log(response);
+  });
+
+}
     if(JSON.parse(localStorage.getItem("user")) && JSON.parse(localStorage.getItem("role"))[0].authority==="user")
     return (
         <div className="App2">
             <NavbarUser />
             <h2 style={{marginLeft: "400px", marginTop:"50px"}}> Bun venit pe pagina utilizatorului! </h2>
-            <h2 style={{marginLeft: "470px", marginTop:"20px"}}> Dispozitivele mele</h2>
+            <h2 style={{marginLeft: "470px", marginTop:"20px"}}> Dispozitivele mele 
+            <Button style={{marginLeft:"15px"}}variant="dark" onClick={openChat}>Chat with admin</Button></h2>
+            {isOpen3 &&  <ChatPage client={client} toUser={toUser} setIsOpen4={setIsOpen4}></ChatPage>} 
             <Table variant='dark' bordered style={{marginTop:'10px',width:"750px",marginLeft:"270px",marginBottom:"10px"}}>
                 <thead>
                     <tr>
@@ -146,7 +173,7 @@ function Userpage() {
         </Table>
 
         <SockJsClient
-        url={'http://20.113.115.48:8081/ws-message'}
+        url={'http://localhost:8081/ws-message'}
         topics={['/topic/message']}
         onConnect={onConnected}
         onDisconnect={console.log("Disconnected!")}
@@ -178,7 +205,6 @@ function Userpage() {
                 defaultValue={new Date().toISOString().split("T")[0]}
               />
                 </Form.Group>
-                    
                 <Button class="but" variant="danger" type="submit" style={{margin:"20px"}}>
                     Selectează data
                 </Button>

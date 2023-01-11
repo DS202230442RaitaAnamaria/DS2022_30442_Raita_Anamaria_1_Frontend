@@ -1,0 +1,16 @@
+.chatpage {
+    display: flex;
+    border: 1px solid darkgrey;
+    height: 96vh;
+    width:50%;
+    margin:auto;
+    border-radius:10px;
+    position:absolute;
+    top:15%;
+    left:22%;
+    right: auto;
+    background-color: whitesmoke;
+  }
+  .chatpage-section {
+    flex: 2;
+  }

@@ -5,6 +5,9 @@ import NavAdmin from '../components/NavAdmin';
 import {Button,Form,Table} from 'react-bootstrap'
 import Modal from 'react-modal';
 import '../App.css';
+import { ChatServiceClient } from "../chat_grpc_web_pb";
+import ChatPage from './ChatPage';
+import { ChatMessage, ReceiveMsgRequest, Empty } from "../chat_pb"
 function AdminPage() {
 
     const [persoane, setPersoane] = useState([]);
@@ -17,8 +20,13 @@ function AdminPage() {
     const [errorMessage2, setMessage2] = useState("");
     const [isOpen, setIsOpen] = useState(false);
     const [isOpen2, setIsOpen2] = useState(false);
+    const [isOpen3, setIsOpen3] = useState(false);
     const [selectedDevice,setSelectedDevice]= useState([]);
     const [selectedPerson,setSelectedPerson]= useState([]);
+    const client = new ChatServiceClient("http://localhost:8080", null, null);
+    const [toUser,setToUser]=useState("")
+    const [msgList, setMsgList] = useState([]);
+    const [chatInitiat,setChatInitiat]=useState("")
     // Aici sunt functii helpere
 
     const togglePopup = (device) => {
@@ -71,7 +79,7 @@ function AdminPage() {
             "Content-Type": "application/json; charset=UTF-8",
             "Authorization": 'Bearer '+ obj
              };
-        axios.get("http://20.113.115.48:8081/person/alluser",{headers:headers2})
+        axios.get("http://localhost:8081/person/alluser",{headers:headers2})
             .then(res => {
                 setPersoane(res.data);
                 
@@ -79,7 +87,7 @@ function AdminPage() {
             .catch(err => {
                
             })
-        axios.get("http://20.113.115.48:8081/devices/all",{headers:headers2})
+        axios.get("http://localhost:8081/devices/all",{headers:headers2})
             .then(resp => {
                 setDevice(resp.data);
             })
@@ -87,6 +95,37 @@ function AdminPage() {
                
             })
 
+               const strRq = new ReceiveMsgRequest();
+               const username = window.localStorage.getItem("username");
+               strRq.setUser(username);
+                var chatStream = client.receiveMsg(strRq, {});
+               chatStream.on("data", (response) => {
+               const from = response.getFrom();
+                   const msg = response.getMsg();
+                   const time = response.getTime();
+                   const toUserFromResponse=response.getTo();
+                   if(localStorage.getItem('username')=='admin'){
+                     if(msg==="useropenedchat"){
+                       if(response.array[3]==='admin'){
+                        console.log(
+                            "aici"
+                        )
+                        var id =response.array[0]
+                        document.getElementById(id).style.backgroundColor="pink"
+                        document.getElementById(id).style.color="black"
+                        document.getElementById(id).style.borderColor="purple"
+                       }
+                     }
+                   }
+                 });
+   
+                 chatStream.on("status", function (status) {
+                   console.log(status.code, status.details, status.metadata);
+                 });
+   
+                 chatStream.on("end", () => {
+                   console.log("Stream ended.");
+                 });
 
     }, [])
     // adauga device
@@ -103,7 +142,7 @@ function AdminPage() {
            };
           
            try {
-            var response= await axios.post("http://20.113.115.48:8081/devices/save?"+params,
+            var response= await axios.post("http://localhost:8081/devices/save?"+params,
             {description:desc.value,address:address.value,mhec:parseFloat(mhec.value)},
                 {headers: headers}
                 )
@@ -123,7 +162,7 @@ function AdminPage() {
            };
           
            try {
-            var response= await axios.post("http://20.113.115.48:8081/person/save",
+            var response= await axios.post("http://localhost:8081/person/save",
             {username:uname.value,password:pass.value,role:"client"},
                 {headers: headers}
                 )
@@ -142,7 +181,7 @@ function AdminPage() {
            id: nr,
        }).toString();
 
-       const url="http://20.113.115.48:8081/person/delete?"+params
+       const url="http://localhost:8081/person/delete?"+params
        let headers2 = {
            "Content-Type": "application/json; charset=UTF-8",
            "Authorization": 'Bearer '+ obj
@@ -164,7 +203,7 @@ function AdminPage() {
            id: nr,
        }).toString();
 
-       const url="http://20.113.115.48:8081/devices/delete?"+params
+       const url="http://localhost:8081/devices/delete?"+params
        let headers2 = {
            "Content-Type": "application/json; charset=UTF-8",
            "Authorization": 'Bearer '+ obj
@@ -189,7 +228,7 @@ function AdminPage() {
            };
 
            try {
-            var response= await axios.post("http://20.113.115.48:8081/devices/edit",
+            var response= await axios.post("http://localhost:8081/devices/edit",
             {iddevices:selectedDevice.iddevices,description:desc.value,address:addr.value,mhec:parseFloat(mhec2.value)},
                 {headers: headers}
                 )
@@ -209,7 +248,7 @@ function AdminPage() {
            };
   
            try {
-            var response= await axios.post("http://20.113.115.48:8081/person/edit",
+            var response= await axios.post("http://localhost:8081/person/edit",
             {idpeople:selectedPerson.idpeople,username:uname.value,password:pass.value},
                 {headers: headers}
                 )
@@ -219,6 +258,20 @@ function AdminPage() {
             
           }
         }
+
+        ///open chat
+        const openChat   = (username) => {
+           setIsOpen3(true)
+           setToUser(username)  
+           document.getElementById(username).style.backgroundColor=null
+           document.getElementById(username).style.color=null
+           document.getElementById(username).style.borderColor=null
+        }
+
+        function setIsOpen4(val){
+            setIsOpen3(val)
+        }
+
    // Pagina efectiva
     if(JSON.parse(localStorage.getItem("user")) && JSON.parse(localStorage.getItem("role"))[0].authority==="admin")
     return (
@@ -261,6 +314,7 @@ function AdminPage() {
                               <td style={{textAlign:"center"}} >
                               <Button variant="info" style={{marginRight:"10px"}} onClick={()=>togglePopup2(person)}>Edit</Button>
                               <Button variant="info" style={{marginRight:"10px"}}  onClick={()=>deletePerson(person.idpeople)} >Delete</Button>
+                              <Button id={person.username} variant="info" style={{marginRight:"10px"}}  onClick={()=>openChat(person.username)} >Chat</Button>
                               </td>
                       </tr>                                                
                   </tbody>
@@ -375,6 +429,9 @@ function AdminPage() {
                 </Button>
             </Form> </div>}
 
+
+            {isOpen3 &&  <ChatPage client={client} setIsOpen4={setIsOpen4} toUser={toUser}></ChatPage>} 
+
             {/* Edit device */}
             <Modal
             isOpen={isOpen}
@@ -435,6 +492,10 @@ function AdminPage() {
                 </Button>
             </Form>
       </Modal>
+        {chatInitiat}
+
+           
+
         </div>
         </div>
       );

@@ -82,7 +82,24 @@ h3 {
   position: "absolute";
 
 }
-.CSRModal{
-  width: 90%;
+.ReactModal__Content{
+  width: 50%;
+  height: 85%;
   max-width: none!important;
+  max-height: none!important;
+  margin-left: 21%;
   }
+.ReactModal__Content--after-open
+{
+  width: 50%;
+  height: 85%;
+  max-width: none!important;
+  max-height: none!important;
+  margin-left: 21%;
+  }
+  .buttonsize2 {
+    width: 50px!important;
+    margin-left:20px
+  }
+
+  .chat{height:300px}

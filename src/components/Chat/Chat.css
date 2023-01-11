@@ -1,0 +1,96 @@
+
+.chat-input {
+    display: flex;
+    background-color: whitesmoke;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  
+  .chat-header {
+    height: 60px;
+    padding: 4px;
+    border-radius: 10px;
+    background-color:magenta;
+    color: white;
+  }
+  
+  .chat-header h3 {
+    margin: 4px;
+  }
+  
+  .chat-list {
+    padding: 4px;
+    height: 320px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: whitesmoke;
+  }
+
+  .chat-input textarea {
+    border-radius: 20px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    outline: none;
+    width: 90%;
+    box-sizing: content-box;
+    margin:10px
+  }
+  
+  .chat-input button {
+    border-radius: 50px;
+  }
+  
+  .chatcard {
+    background-color: pink;
+    padding: 8px;
+    border-radius: 14px;
+    margin: 4px;
+    color: white;
+    width:fit-content;
+    max-width:300px;
+  }
+  
+  .chatcard-mine {
+    border-bottom-right-radius: 0;
+    margin-left: auto;
+  }
+  
+  .chatcard-friend {
+    border-top-left-radius: 0;
+    background-color: purple;
+    width:fit-content;
+  }
+  
+  .chatcard-msg {
+    padding: 4px;
+    overflow-wrap: break-word;
+  }
+  
+  .chatcard-time {
+    text-align: right;
+    font-size: 10px;
+  }
+
+  .butonu:hover{
+    color:black;
+    background: pink!important;
+    border-color: black!important;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }

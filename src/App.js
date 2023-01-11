@@ -10,15 +10,14 @@ import {
   Routes,
   Route
 } from "react-router-dom";
-class App extends Component {
-  constructor(props) {
-    super(props);
+import { ChatServiceClient } from "./chat_grpc_web_pb";
+import ChatPage from "./pages/ChatPage";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
-  }
-  render() {
+function App(){
       
     return ( 
-      <div style={styles.app}>
+      <div>
       <Router>
         
         <Routes>
@@ -36,13 +35,7 @@ class App extends Component {
     </footer>
     </div>
     );
-  }
+  
 }
 
 export default App;
-
-const styles = {
-  app: {
-    padding: 0,
-  },
-};
